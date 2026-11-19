@@ -22,6 +22,8 @@ A description alone is enough: start right away. Ask a question only if you can'
 
 If you find none, don't ask for one and don't stop: run the whole triage without it. The analyst then returns its analysis in its answer instead of filing a ticket.
 
+**The Slack thread is optional too.** It's given with the bug as two lines, `channel_id: C…` and `thread_ts: 1234567890.123456`, or as a Slack message link. Remove those two lines from the bug before passing it on: the subagents get only the reporter's words.
+
 ## Step 1: reproduce
 
 Call the **bug-reproducer** subagent. Give it:
@@ -35,7 +37,7 @@ Then read the first line of its report, the verdict:
 | Verdict | What you do next |
 |---|---|
 | `yes` | Go to step 2. |
-| `no`, `stuck` or `needs info` | Stop and hand back to the human. Don't call the analyst: no ticket is filed for a bug that isn't reproduced. Start your answer with **I can't reproduce this bug.**, then show the report, then ask the reporter for what would help: the missing information for `needs info`, or the details that could make it reproducible for `no` or `stuck` (exact steps, browser, file, screenshot). |
+| `no`, `stuck` or `needs info` | Stop and hand back to the human. Don't call the analyst: no ticket is filed for a bug that isn't reproduced. Start your answer with **I can't reproduce this bug.**, then show the report, then ask the reporter for what would help: the missing information for `needs info`, or the details that could make it reproducible for `no` or `stuck` (exact steps, browser, file, screenshot). Then go to step 3. |
 
 ## Step 2: analyze and file
 
@@ -43,6 +45,17 @@ Call the **bug-analyst** subagent. Give it, in this order:
 1. the Notion bug board link, or "No board: return the analysis in your answer" if you have none;
 2. the original bug, exactly as the user gave it;
 3. the bug-reproducer's report, **copied as is**, from its first line to its last. Don't summarize it, reformat it, or fix anything in it: the analyst copies its steps into the ticket, so any change you make ends up there.
+
+## Step 3: reply in Slack
+
+Only if a Slack thread was given. Post one reply in that thread with Slack's send-message tool: `channel_id` and `thread_ts` from the input, no broadcast. Post nowhere else.
+
+- Reproduced: one line each for the root cause, the size, the recommendation and the Notion ticket link.
+- Not reproduced: **I can't reproduce this bug.**, then your questions for the reporter.
+
+End the reply with a link back to this session so the reader can answer there. Build it from the `CLAUDE_CODE_REMOTE_SESSION_ID` environment variable: swap its `cse_` prefix for `session_` and append it to `https://claude.ai/code/`. Write it as: `👉 Reply "go ahead" or "no" here: <link>`. If the variable isn't set, leave the link out.
+
+If no thread was given, or Slack isn't connected, skip this step.
 
 ## Output
 
@@ -60,7 +73,7 @@ Show the user both reports, unchanged, with nothing before them:
 
 If you stopped after step 1, the answer is: the line **I can't reproduce this bug.**, then only the first part, then your question to the reporter.
 
-After the two reports, add at most one line, only if something needs the user's attention: for example, a subagent failed, the analyst left a property empty, it updated an existing ticket instead of creating one, or no ticket was filed (say why: no board link, or Notion isn't connected here).
+After the two reports, add at most one line, only if something needs the user's attention: for example, a subagent failed, the analyst left a property empty, it updated an existing ticket instead of creating one, or no ticket was filed (say why: no board link, or Notion isn't connected here), or the Slack reply wasn't posted (say why).
 
 ## Rules
 
