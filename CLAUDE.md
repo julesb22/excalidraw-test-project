@@ -32,3 +32,9 @@ yarn fix             # Auto-fix formatting and linting issues
 - Internal packages use path aliases (see `vitest.config.mts`)
 - Build system uses esbuild for packages, Vite for the app
 - TypeScript throughout with strict configuration
+
+## Bug triage
+
+Bug board: https://app.notion.com/p/6b0c96d497fc45ef92549116f476f021
+
+The `/bug-triage` skill files its tickets on this Notion board.
