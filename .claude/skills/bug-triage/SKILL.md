@@ -35,7 +35,7 @@ Then read the first line of its report, the verdict:
 | Verdict | What you do next |
 |---|---|
 | `yes` | Go to step 2. |
-| `no`, `stuck` or `needs info` | Stop. Show the report, and don't call the analyst: no ticket is filed for a bug that isn't reproduced. For `needs info`, ask the user for the missing information. For `no` or `stuck`, say in one line what would help reproduce it. |
+| `no`, `stuck` or `needs info` | Stop and hand back to the human. Don't call the analyst: no ticket is filed for a bug that isn't reproduced. Start your answer with **I can't reproduce this bug.**, then show the report, then ask the reporter for what would help: the missing information for `needs info`, or the details that could make it reproducible for `no` or `stuck` (exact steps, browser, file, screenshot). |
 
 ## Step 2: analyze and file
 
@@ -58,7 +58,7 @@ Show the user both reports, unchanged, with nothing before them:
 <the bug-analyst's answer, as is>
 ```
 
-If you stopped after step 1, show only the first part, then your question or your one line.
+If you stopped after step 1, the answer is: the line **I can't reproduce this bug.**, then only the first part, then your question to the reporter.
 
 After the two reports, add at most one line, only if something needs the user's attention: for example, a subagent failed, the analyst left a property empty, it updated an existing ticket instead of creating one, or no ticket was filed (say why: no board link, or Notion isn't connected here).
 
