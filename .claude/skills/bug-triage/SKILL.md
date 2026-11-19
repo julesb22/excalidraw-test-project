@@ -1,6 +1,6 @@
 ---
 name: bug-triage
-description: Triages a bug end to end. It runs the bug-reproducer subagent to prove the bug with a failing test, then hands its report to the bug-analyst subagent, which gives the root cause, size and a GO, LATER or NO-GO recommendation, and files a ticket on the Notion bug board when one is given. Use it when someone reports a bug in any form (a plain description, a chat or Slack message, an issue URL) and wants it reproduced, analyzed or triaged. A bug description alone is enough to start.
+description: Triages a bug end to end. It runs the bug-reproducer subagent to prove the bug with a failing test, then, only if the bug is reproduced, hands its report to the bug-analyst subagent, which gives the root cause, size and a GO, LATER or NO-GO recommendation, and files a ticket on the Notion bug board when one is given. Use it when someone reports a bug in any form (a plain description, a chat or Slack message, an issue URL) and wants it reproduced, analyzed or triaged. A bug description alone is enough to start.
 argument-hint: <bug description or issue URL> [board: <Notion bug board link>]
 ---
 
@@ -35,8 +35,7 @@ Then read the first line of its report, the verdict:
 | Verdict | What you do next |
 |---|---|
 | `yes` | Go to step 2. |
-| `no` or `stuck` | Go to step 2 anyway: the analyst files a NO-GO ticket that says what's missing. |
-| `needs info` | Stop. Show the report and ask the user for the missing information. Don't call the analyst. |
+| `no`, `stuck` or `needs info` | Stop. Show the report, and don't call the analyst: no ticket is filed for a bug that isn't reproduced. For `needs info`, ask the user for the missing information. For `no` or `stuck`, say in one line what would help reproduce it. |
 
 ## Step 2: analyze and file
 
@@ -59,7 +58,7 @@ Show the user both reports, unchanged, with nothing before them:
 <the bug-analyst's answer, as is>
 ```
 
-If you stopped at `needs info`, show only the first part, then ask your question.
+If you stopped after step 1, show only the first part, then your question or your one line.
 
 After the two reports, add at most one line, only if something needs the user's attention: for example, a subagent failed, the analyst left a property empty, it updated an existing ticket instead of creating one, or no ticket was filed (say why: no board link, or Notion isn't connected here).
 
